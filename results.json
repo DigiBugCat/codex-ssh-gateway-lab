@@ -1,0 +1,181 @@
+{
+  "checkedAt": "2026-10-10T05:30:50.743Z",
+  "version": "codex-cli 0.147.0",
+  "tests": [
+    {
+      "name": "Real app-server → WebSocket adapter → pinned SSH → real exec-server",
+      "result": "PASS"
+    },
+    {
+      "name": "Intercepted virtual file read; no corresponding host file",
+      "result": "PASS"
+    },
+    {
+      "name": "Unintercepted file read reaches real executor over SSH",
+      "result": "PASS"
+    },
+    {
+      "name": "Real shell side effect, separate stdout/stderr and process close",
+      "result": "PASS"
+    },
+    {
+      "name": "Running process cancellation over the same boundary",
+      "result": "PASS"
+    },
+    {
+      "name": "Unknown operation returns an explicit error",
+      "result": "PASS"
+    },
+    {
+      "name": "New SSH connection and executor retain completed filesystem work",
+      "result": "PASS"
+    }
+  ],
+  "remainingChildren": 0,
+  "trace": [
+    {
+      "direction": "request",
+      "method": "initialize",
+      "id": 1
+    },
+    {
+      "event": "ssh-executor-started"
+    },
+    {
+      "direction": "response",
+      "id": 1
+    },
+    {
+      "direction": "request",
+      "method": "initialized"
+    },
+    {
+      "direction": "request",
+      "method": "environment/info",
+      "id": 2
+    },
+    {
+      "direction": "response",
+      "id": 2
+    },
+    {
+      "direction": "request",
+      "method": "initialize",
+      "id": 1
+    },
+    {
+      "event": "ssh-executor-started"
+    },
+    {
+      "direction": "response",
+      "id": 1
+    },
+    {
+      "direction": "request",
+      "method": "initialized"
+    },
+    {
+      "direction": "request",
+      "method": "fs/readFile",
+      "id": 2
+    },
+    {
+      "event": "virtual-file-intercept"
+    },
+    {
+      "direction": "request",
+      "method": "fs/readFile",
+      "id": 3
+    },
+    {
+      "direction": "response",
+      "id": 3
+    },
+    {
+      "direction": "request",
+      "method": "process/start",
+      "id": 4
+    },
+    {
+      "direction": "response",
+      "id": 4
+    },
+    {
+      "direction": "response",
+      "method": "process/output"
+    },
+    {
+      "direction": "response",
+      "method": "process/output"
+    },
+    {
+      "direction": "response",
+      "method": "process/exited"
+    },
+    {
+      "direction": "response",
+      "method": "process/closed"
+    },
+    {
+      "direction": "request",
+      "method": "process/start",
+      "id": 5
+    },
+    {
+      "direction": "response",
+      "id": 5
+    },
+    {
+      "direction": "request",
+      "method": "process/signal",
+      "id": 6
+    },
+    {
+      "direction": "response",
+      "id": 6
+    },
+    {
+      "direction": "response",
+      "method": "process/exited"
+    },
+    {
+      "direction": "response",
+      "method": "process/closed"
+    },
+    {
+      "direction": "request",
+      "method": "unsupported/lab",
+      "id": 7
+    },
+    {
+      "direction": "response",
+      "id": 7,
+      "error": -32601
+    },
+    {
+      "direction": "request",
+      "method": "initialize",
+      "id": 1
+    },
+    {
+      "event": "ssh-executor-started"
+    },
+    {
+      "direction": "response",
+      "id": 1
+    },
+    {
+      "direction": "request",
+      "method": "initialized"
+    },
+    {
+      "direction": "request",
+      "method": "fs/readFile",
+      "id": 2
+    },
+    {
+      "direction": "response",
+      "id": 2
+    }
+  ]
+}

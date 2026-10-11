@@ -1,0 +1,16 @@
+{
+  "name": "codex-executor-boundary-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node test-boundary.mjs && node test-durable.mjs && node test-durable-bridge.mjs",
+    "test:boundary": "node test-boundary.mjs",
+    "test:durable": "node test-durable.mjs && node test-durable-bridge.mjs",
+    "test:live-model": "node model-probe.mjs",
+    "test:move": "node test-move.mjs"
+  },
+  "dependencies": {
+    "ssh2": "1.17.0",
+    "ws": "8.18.3"
+  }
+}

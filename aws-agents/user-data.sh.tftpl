@@ -1,0 +1,82 @@
+#!/bin/bash
+# Control-plane box: SSH gateway on :22 (no real sshd), per-user harness, router.
+# Admin access is SSM Session Manager only.
+set -euxo pipefail
+export AWS_DEFAULT_REGION=${region}
+dnf install -y tar gzip unzip python3-boto3 git
+ARCH=arm64
+
+# Pinned Node.js, verified against the release's published checksums.
+NODE=v22.23.0
+cd /tmp
+curl -sSfLO "https://nodejs.org/dist/$NODE/node-$NODE-linux-$ARCH.tar.xz"
+curl -sSfLO "https://nodejs.org/dist/$NODE/SHASUMS256.txt"
+grep " node-$NODE-linux-$ARCH.tar.xz\$" SHASUMS256.txt | sha256sum -c -
+tar -xJf "node-$NODE-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1
+
+# Current AWS CLI v2 (the AMI's may predate Lambda MicroVMs).
+curl -sSfL https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip -o awscliv2.zip
+unzip -q awscliv2.zip && ./aws/install --update -i /usr/local/aws-cli -b /usr/local/bin
+
+# Pinned codex release, verified by checksum.
+curl -sSfL https://github.com/openai/codex/releases/download/rust-v0.147.0/codex-aarch64-unknown-linux-musl.tar.gz -o codex.tgz
+echo "eb677c80f666b1ab8b4b1d083b66e8d614b1281d960bb6f9fd8ca98f58b38b90  codex.tgz" | sha256sum -c -
+tar -xzf codex.tgz && install -m 0755 codex-aarch64-unknown-linux-musl /usr/local/bin/codex
+# The desktop app runs tools through "code mode", which needs this helper next to codex.
+curl -sSfL https://github.com/openai/codex/releases/download/rust-v0.147.0/codex-code-mode-host-aarch64-unknown-linux-musl.tar.gz -o cmh.tgz
+echo "dfd4ff98ea4db30ed078af9c31b6f86e3da4836d0573aa87e225e5a5b54d3c7c  cmh.tgz" | sha256sum -c -
+tar -xzf cmh.tgz && install -m 0755 codex-code-mode-host-aarch64-unknown-linux-musl /usr/local/bin/codex-code-mode-host
+
+useradd --system --create-home --home-dir /opt/agents agents || true
+install -d -o agents -g agents -m 0750 /opt/agents/app /opt/agents/state
+/usr/local/bin/aws s3 cp "s3://${bucket}/${app_key}" /tmp/app.zip
+unzip -o -q /tmp/app.zip -d /opt/agents/app
+cd /opt/agents/app && /usr/local/bin/npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+chown -R agents:agents /opt/agents
+
+/usr/local/bin/aws ssm get-parameter --name "${host_param}" --with-decryption --query Parameter.Value --output text > /opt/agents/state/host_key
+chown agents:agents /opt/agents/state/host_key && chmod 0600 /opt/agents/state/host_key
+
+# Initial config: local executors on this box. setup.sh later swaps in MicroVMs.
+cat > /opt/agents/state/gateway.json <<'JSON'
+{
+  "host": "0.0.0.0", "port": 22, "region": "${region}",
+  "hostKey": "host_key", "templates": "/opt/agents/app/gateway-templates.json",
+  "codexVersion": "0.147.0", "auditLog": "audit.jsonl",
+  "users": { "andrew": { "admin": true, "publicKeys": ${public_keys}, "environments": ["proj"] } },
+  "harness": { "root": "harness", "portBase": 8800 },
+  "snapshots": { "bucket": "${bucket}", "presignScript": "/opt/agents/app/presign.py" },
+  "router": {
+    "machines": { "A": { "kind": "local", "root": "machines/A" }, "B": { "kind": "local", "root": "machines/B" } },
+    "workspaces": { "proj": { "path": "workspace/proj", "machine": "A" } },
+    "environments": { "proj": { "workspace": "proj", "machine": "A" } }
+  }
+}
+JSON
+chown agents:agents /opt/agents/state/gateway.json
+
+cat > /etc/systemd/system/agents-gateway.service <<'UNIT'
+[Unit]
+Description=Codex SSH gateway (front door, harness, router)
+After=network-online.target
+Wants=network-online.target
+[Service]
+User=agents
+WorkingDirectory=/opt/agents/state
+Environment=PATH=/usr/local/bin:/usr/bin:/bin AWS_DEFAULT_REGION=${region}
+ExecStart=/usr/local/bin/node /opt/agents/app/ssh-gateway.mjs /opt/agents/state/gateway.json
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/agents/state /tmp
+PrivateTmp=true
+Restart=always
+RestartSec=2
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+# Port 22 belongs to the gateway; the real sshd is never exposed.
+systemctl disable --now sshd.service sshd.socket 2>/dev/null || true
+systemctl daemon-reload
+systemctl enable --now agents-gateway.service

@@ -1,0 +1,46 @@
+{
+  "checkedAt": "2026-10-10T06:41:27.952Z",
+  "scenarios": {
+    "transparent": {
+      "reply1": "machine-A",
+      "reply2": "machine-B\nturn one\nturn two",
+      "turn1Exec": [
+        "proj@A"
+      ],
+      "turn2Exec": [
+        "proj@B"
+      ],
+      "move": {
+        "environment": "proj",
+        "from": "A",
+        "to": "B",
+        "reboundConnections": 1,
+        "sync": {
+          "workspace": "proj",
+          "from": "A",
+          "to": "B",
+          "changed": true,
+          "syncMs": 43.1
+        }
+      },
+      "notesOnB": "turn one\nturn two\n"
+    },
+    "native": {
+      "reply1": "machine-A",
+      "reply2": "machine-B\nturn one\nturn two",
+      "error": null,
+      "place": {
+        "workspace": "proj2",
+        "from": "A",
+        "to": "B",
+        "changed": true,
+        "syncMs": 50.6
+      },
+      "turn2Exec": [
+        "proj2-b@B"
+      ],
+      "notesOnB": "turn one\nturn two\n"
+    }
+  },
+  "result": "PASS"
+}

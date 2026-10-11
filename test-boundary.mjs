@@ -1,0 +1,66 @@
+import assert from 'node:assert/strict';
+import { once } from 'node:events';
+import { createInterface } from 'node:readline';
+import { writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
+import WebSocket from 'ws';
+import { startLab } from './boundary-lab.mjs';
+import { Rpc } from './rpc.mjs';
+const lab = await startLab();
+const results = { checkedAt: new Date().toISOString(), version: execFileSync('codex', ['--version'], { encoding: 'utf8' }).trim(), tests: [] };
+const pass = name => { results.tests.push({ name, result: 'PASS' }); console.log('PASS', name); };
+let ws;
+try {
+  const app = lab.launch('codex', ['app-server']);
+  const appRpc = new Rpc(s => app.stdin.write(s + '\n'));
+  createInterface({ input: app.stdout }).on('line', l => appRpc.receive(l));
+  await appRpc.call('initialize', { clientInfo: { name: 'boundary-lab', version: '0.1' }, capabilities: { experimentalApi: true } });
+  appRpc.notify('initialized');
+  await appRpc.call('environment/add', { environmentId: 'lab', execServerUrl: lab.url });
+  const info = await appRpc.call('environment/info', { environmentId: 'lab' });
+  assert.equal(info.cwd, pathToFileURL(lab.root + '/workspace').href); assert.ok(info.shell.path);
+  pass('Real app-server → WebSocket adapter → pinned SSH → real exec-server');
+  ws = new WebSocket(lab.url); await once(ws, 'open');
+  const rpc = new Rpc(s => ws.send(s)); ws.on('message', b => rpc.receive(b.toString()));
+  await rpc.call('initialize', { clientName: 'boundary-test', resumeSessionId: null }); rpc.notify('initialized');
+  const virtual = await rpc.call('fs/readFile', { path: lab.virtualPath });
+  assert.equal(Buffer.from(virtual.dataBase64, 'base64').toString(), 'hello from the virtual workspace\n');
+  assert.equal(existsSync('/virtual/boundary-marker.txt'), false);
+  pass('Intercepted virtual file read; no corresponding host file');
+  writeFileSync(lab.root + '/workspace/real.txt', 'real executor file\n');
+  const real = await rpc.call('fs/readFile', { path: pathToFileURL(lab.root + '/workspace/real.txt').href });
+  assert.equal(Buffer.from(real.dataBase64, 'base64').toString(), 'real executor file\n');
+  pass('Unintercepted file read reaches real executor over SSH');
+  const params = { cwd: pathToFileURL(lab.root + '/workspace').href, env: {}, tty: false };
+  await rpc.call('process/start', { ...params, processId: 'write', argv: ['/bin/sh', '-c', 'printf persisted > executed.txt; printf executor-stdout; printf executor-stderr >&2'] });
+  const exit = await rpc.wait(e => e.method === 'process/closed' && e.params.processId === 'write');
+  assert.ok(exit);
+  assert.equal(readFileSync(lab.root + '/workspace/executed.txt', 'utf8'), 'persisted');
+  for (const [stream, expected] of [['stdout', 'executor-stdout'], ['stderr', 'executor-stderr']]) {
+    const actual = rpc.events.filter(e => e.method === 'process/output' && e.params.processId === 'write' && e.params.stream === stream).map(e => Buffer.from(e.params.chunk, 'base64').toString()).join(''); assert.equal(actual, expected);
+  }
+  pass('Real shell side effect, separate stdout/stderr and process close');
+  await rpc.call('process/start', { ...params, processId: 'cancel', argv: ['/bin/sleep', '30'] });
+  await rpc.call('process/signal', { processId: 'cancel', signal: 'interrupt' });
+  await rpc.wait(e => e.method === 'process/closed' && e.params.processId === 'cancel');
+  assert.notEqual(rpc.events.find(e => e.method === 'process/exited' && e.params.processId === 'cancel').params.exitCode, 0);
+  pass('Running process cancellation over the same boundary');
+  await assert.rejects(rpc.call('unsupported/lab', {}), /32601/);
+  pass('Unknown operation returns an explicit error');
+  ws.close(); await once(ws, 'close');
+  ws = new WebSocket(lab.url); await once(ws, 'open');
+  const reconnected = new Rpc(s => ws.send(s));
+  ws.on('message', b => reconnected.receive(b.toString()));
+  await reconnected.call('initialize', { clientName: 'boundary-reconnect', resumeSessionId: null });
+  reconnected.notify('initialized');
+  const persisted = await reconnected.call('fs/readFile', { path: pathToFileURL(lab.root + '/workspace/executed.txt').href });
+  assert.equal(Buffer.from(persisted.dataBase64, 'base64').toString(), 'persisted');
+  pass('New SSH connection and executor retain completed filesystem work');
+} finally {
+  ws?.terminate();
+  results.remainingChildren = await lab.close();
+  writeFileSync('results.json', JSON.stringify({ ...results, trace: lab.trace }, null, 2) + '\n');
+}
+assert.equal(results.remainingChildren, 0);
+console.log('PASS all owned subprocesses stopped');

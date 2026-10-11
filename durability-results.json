@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-10T05:27:05.541Z",
+  "node": "v26.3.1",
+  "checks": [
+    "Identity and completed operation survive full worker exit; retry deduplicates",
+    "SIGKILL at accepted: recover with exactly one committed local event",
+    "SIGKILL at beforeCommit: recover with exactly one committed local event",
+    "SIGKILL at afterCommit: recover with exactly one committed local event",
+    "Conflicting operation ID is rejected",
+    "Eight concurrent activations commit one event for the same operation",
+    "100 dormant identities are durable rows, with no per-agent worker retained"
+  ],
+  "warmLocalTransaction": {
+    "n": 100,
+    "medianMs": 0.18,
+    "p95Ms": 0.55,
+    "maxMs": 3.73
+  },
+  "coldProcessStartCommitAndExit": {
+    "n": 25,
+    "medianMs": 50.02,
+    "p95Ms": 54.17,
+    "maxMs": 55.56
+  },
+  "scope": "Local deterministic SQLite events; no model, network, VM, celld or external side-effect recovery."
+}

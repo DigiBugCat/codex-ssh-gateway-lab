@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "agentId": "real-codex-80746ef1db7c",
+  "initialReply": "durable-real-model-probe",
+  "resumedReply": "durable-real-model-probe-resumed",
+  "cloudRevision": 2,
+  "model": "gpt-5.6-sol",
+  "scope": "Both real model turns and SSH executors ran on the Mac. Checkpoints and commit workers ran on AWS. This reconstructs an ephemeral harness from explicit application state; it is not native Codex thread/resume or in-flight model continuation."
+}

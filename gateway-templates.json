@@ -1,0 +1,10 @@
+{
+  "recordedWith": "Codex Desktop 26.1007.21159 / codex-cli 0.147.0",
+  "normalize": "first run of 8 \\ooo octal escapes -> <MARKER>",
+  "templates": {
+    "probe": "9f05c5e06b9e6035aec87a19be48f0a9af9235c6129466c0cd3e37e1f105ceec",
+    "version": "0c2091e787545a5e13b4f753c542f33ec8e5f7f02b3b42fccbf0aa7e3ac4b836",
+    "boot": "b21a589917906fdf94cd2e01de4720c5b17b2d488ebf291ea39566d62bf704eb",
+    "proxy": "a1be537a9b91c87fbc3980ce0fb4aa808a50fadec3ba791e6abf2e1fd71634ec"
+  }
+}

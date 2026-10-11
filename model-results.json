@@ -1,0 +1,632 @@
+{
+  "model": "gpt-5.6-sol",
+  "expected": "durable-real-model-probe",
+  "reply": "durable-real-model-probe",
+  "checks": [
+    "real model completed",
+    "file side effect verified",
+    "process/start crossed SSH adapter"
+  ],
+  "trace": [
+    {
+      "direction": "request",
+      "method": "initialize",
+      "id": 1
+    },
+    {
+      "event": "ssh-executor-started"
+    },
+    {
+      "direction": "response",
+      "id": 1
+    },
+    {
+      "direction": "request",
+      "method": "initialized"
+    },
+    {
+      "direction": "request",
+      "method": "environment/info",
+      "id": 2
+    },
+    {
+      "direction": "response",
+      "id": 2
+    },
+    {
+      "direction": "request",
+      "method": "environment/info",
+      "id": 3
+    },
+    {
+      "direction": "response",
+      "id": 3
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 4
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 5
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 6
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 7
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 8
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 9
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 10
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 11
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 12
+    },
+    {
+      "direction": "response",
+      "id": 4,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 5,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 6,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 7
+    },
+    {
+      "direction": "response",
+      "id": 8,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 9,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 10,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 11,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 12,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 13
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 14
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 15
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 16
+    },
+    {
+      "direction": "response",
+      "id": 13,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 14,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 15,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 16,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 17
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 18
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 19
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 20
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 21
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 22
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 23
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 24
+    },
+    {
+      "direction": "response",
+      "id": 17,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 18,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 19,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 20,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 21,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 22,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 23,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 24,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 25
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 26
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 27
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 28
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 29
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 30
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 31
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 32
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 33
+    },
+    {
+      "direction": "response",
+      "id": 25,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 26,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 27,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 28
+    },
+    {
+      "direction": "response",
+      "id": 29,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 30,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 31,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 32,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 33,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 34
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 35
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 36
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 37
+    },
+    {
+      "direction": "response",
+      "id": 34,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 35,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 36,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 37,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 38
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 39
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 40
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 41
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 42
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 43
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 44
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 45
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 46
+    },
+    {
+      "direction": "response",
+      "id": 38,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 39,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 40,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 41
+    },
+    {
+      "direction": "response",
+      "id": 42,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 43,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 44,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 45,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 46,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 47
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 48
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 49
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 50
+    },
+    {
+      "direction": "response",
+      "id": 47,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 48,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 49,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 50,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 51
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 52
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 53
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 54
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 55
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 56
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 57
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 58
+    },
+    {
+      "direction": "request",
+      "method": "fs/getMetadata",
+      "id": 59
+    },
+    {
+      "direction": "response",
+      "id": 51,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 52,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 53,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 54
+    },
+    {
+      "direction": "response",
+      "id": 55,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 56,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 57,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 58,
+      "error": -32004
+    },
+    {
+      "direction": "response",
+      "id": 59,
+      "error": -32004
+    },
+    {
+      "direction": "request",
+      "method": "process/start",
+      "id": 60
+    },
+    {
+      "direction": "response",
+      "id": 60
+    },
+    {
+      "direction": "response",
+      "method": "process/output"
+    },
+    {
+      "direction": "response",
+      "method": "process/exited"
+    },
+    {
+      "direction": "response",
+      "method": "process/closed"
+    },
+    {
+      "direction": "request",
+      "method": "process/terminate",
+      "id": 61
+    },
+    {
+      "direction": "response",
+      "id": 61
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-10T05:27:05.785Z",
+  "result": "PASS",
+  "checks": [
+    "Gateway startup recovers an accepted operation after worker SIGKILL",
+    "Durable history returned through executor file-read interception",
+    "Fresh gateway, SSH transport, executor and database connection preserve the same identity and one event"
+  ],
+  "fullLocalLabStartupThroughFirstReadMs": [
+    53.24,
+    33.16
+  ],
+  "timingScope": "Two illustrative samples, includes SSH key generation and handshake; not a percentile benchmark."
+}

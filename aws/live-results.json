@@ -1,0 +1,52 @@
+{
+  "agentId": "verify-00e15008f6ab",
+  "checks": [
+    "FIFO queue -> real Lambda -> durable DynamoDB transaction",
+    "Forced duplicate delivery followed by FIFO barrier produces no duplicate event",
+    "Fresh Lambda runtime preserves prior committed identity and state"
+  ],
+  "queueToCommitSeconds": 2.13,
+  "beforeRecycle": {
+    "response": {
+      "ok": true,
+      "runtimeInstanceId": "137caf4628f4480d9c42780b0ed6257b"
+    },
+    "elapsedMs": 379.66,
+    "logs": "START RequestId: 3d25d9ab-2983-43ad-b944-e5dae77971fb Version: $LATEST\nEND RequestId: 3d25d9ab-2983-43ad-b944-e5dae77971fb\nREPORT RequestId: 3d25d9ab-2983-43ad-b944-e5dae77971fb\tDuration: 162.58 ms\tBilled Duration: 163 ms\tMemory Size: 256 MB\tMax Memory Used: 97 MB\t\n"
+  },
+  "afterRecycle": {
+    "response": {
+      "ok": true,
+      "runtimeInstanceId": "6a5c6879e1694fc5ae5e8d79cd4cc73b"
+    },
+    "elapsedMs": 1574.18,
+    "logs": "START RequestId: 2d83c8c4-589a-4577-8e13-6c4cd2540ad8 Version: $LATEST\nEND RequestId: 2d83c8c4-589a-4577-8e13-6c4cd2540ad8\nREPORT RequestId: 2d83c8c4-589a-4577-8e13-6c4cd2540ad8\tDuration: 1143.44 ms\tBilled Duration: 1386 ms\tMemory Size: 256 MB\tMax Memory Used: 96 MB\tInit Duration: 241.90 ms\t\n"
+  },
+  "events": [
+    {
+      "text": "saved through the AWS queue",
+      "operationId": "one",
+      "pk": "AGENT#verify-00e15008f6ab",
+      "sk": "EVENT#00000000000000000001"
+    },
+    {
+      "operationId": "barrier",
+      "pk": "AGENT#verify-00e15008f6ab",
+      "text": "after duplicate",
+      "sk": "EVENT#00000000000000000002"
+    },
+    {
+      "pk": "AGENT#verify-00e15008f6ab",
+      "operationId": "before-recycle",
+      "text": "before-recycle",
+      "sk": "EVENT#00000000000000000003"
+    },
+    {
+      "operationId": "after-recycle",
+      "pk": "AGENT#verify-00e15008f6ab",
+      "sk": "EVENT#00000000000000000004",
+      "text": "after-recycle"
+    }
+  ],
+  "scope": "Synthetic deterministic events. No model call or arbitrary shell execution."
+}

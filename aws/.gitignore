@@ -1,0 +1,6 @@
+.terraform/
+*.tfstate*
+*.tfplan
+*.zip
+*.tfvars
+__pycache__/
